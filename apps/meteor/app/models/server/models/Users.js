@@ -1643,6 +1643,21 @@ Find users to send a message by email if:
 			},
 		});
 	}
+
+	updateContact(updatedContact) {
+		const query = {
+			'phonebook.uid': updatedContact.uid,
+		};
+		const update = {
+			$set: {
+				name: updatedContact.name,
+				fname: updatedContact.fname,
+				phone: updatedContact.phone,
+				fav: updatedContact.fav,
+			},
+		};
+		return this.update(query, update, { multi: true });
+	}
 }
 
 export default new Users(Meteor.users, true);

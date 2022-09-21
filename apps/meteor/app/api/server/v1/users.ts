@@ -926,6 +926,46 @@ API.v1.addRoute(
 );
 
 API.v1.addRoute(
+	'phonebook.getContacts',
+	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
+	{
+		get() {
+			check(
+				this.queryParams,
+				Match.ObjectIncluding({
+					uid: Match.Maybe(String),
+				}),
+			);
+			const { uid } = this.queryParams;
+			const user = Users.findOneById(uid);
+			return API.v1.success(user.phonebook);
+		},
+	},
+);
+
+API.v1.addRoute(
+	'phonebook.updateContact',
+	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
+	{
+		post() {
+			// check(
+			// 	this.queryParams,
+			// 	Match.ObjectIncluding({
+			// 		uid: Match.Maybe(String),
+			// 	}),
+			// );
+			console.log('Here in the post, bodyParams: ', this.bodyParams);
+			const updatedContact = this.bodyParams;
+			Users.updateContact(updatedContact);
+
+			const user = Users.findOneById(this.userId);
+			console.log('User: ', user);
+			return API.v1.success(user.phonebook);
+		},
+	},
+);
+
+API.v1.addRoute(
 	'users.logout',
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{

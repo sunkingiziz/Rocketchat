@@ -144,6 +144,15 @@ export interface IUser extends IRocketChatRecord {
 	extension?: string;
 	inviteToken?: string;
 	federated?: boolean;
+	phonebook: IUserContact[];
+}
+
+export interface IUserContact {
+	uid: string;
+	name: string;
+	fname: string;
+	phone: string;
+	fav: boolean;
 }
 
 export interface IRegisterUser extends IUser {
