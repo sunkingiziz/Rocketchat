@@ -1644,19 +1644,50 @@ Find users to send a message by email if:
 		});
 	}
 
-	updateContact(updatedContact) {
+	updateContact(_id, updatedContact) {
 		const query = {
+			_id,
 			'phonebook.uid': updatedContact.uid,
 		};
 		const update = {
 			$set: {
-				name: updatedContact.name,
-				fname: updatedContact.fname,
-				phone: updatedContact.phone,
-				fav: updatedContact.fav,
+				'phonebook.$': {
+					name: updatedContact.name,
+					fname: updatedContact.fname,
+					phone: updatedContact.phone,
+					fav: updatedContact.fav,
+				},
 			},
 		};
-		return this.update(query, update, { multi: true });
+		return this.update(query, update);
+	}
+
+	insertContact(_id, insertedContact) {
+		const user = this.findOneById(_id);
+		const { phonebook } = user;
+		phonebook.push(insertedContact);
+		const query = {
+			_id,
+		};
+		const update = {
+			$set: {
+				phonebook,
+			},
+		};
+		return this.update(query, update);
+	}
+
+	removeContact(_id, removedContact) {
+		const query = {
+			_id,
+			'phonebook.uid': removedContact.uid,
+		};
+		const remove = {
+			$pull: {
+				'phonebook.$.uid': removedContact.uid,
+			},
+		};
+		return this.update(query, remove);
 	}
 }
 

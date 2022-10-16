@@ -948,18 +948,42 @@ API.v1.addRoute(
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{
 		post() {
-			// check(
-			// 	this.queryParams,
-			// 	Match.ObjectIncluding({
-			// 		uid: Match.Maybe(String),
-			// 	}),
-			// );
 			console.log('Here in the post, bodyParams: ', this.bodyParams);
 			const updatedContact = this.bodyParams;
-			Users.updateContact(updatedContact);
+			Users.updateContact(this.userId, updatedContact);
+
+			const user = Users.findOneById(this.userId);
+			return API.v1.success(user.phonebook);
+		},
+	},
+);
+
+API.v1.addRoute(
+	'phonebook.insertContact',
+	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
+	{
+		post() {
+			console.log('Here in the post, bodyParams: ', this.bodyParams);
+			const insertedContact = this.bodyParams;
+
+			Users.updateContact(this.userId, insertedContact);
 
 			const user = Users.findOneById(this.userId);
 			console.log('User: ', user);
+			return API.v1.success(user.phonebook);
+		},
+	},
+);
+
+API.v1.addRoute(
+	'phonebook.removeContact',
+	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
+	{
+		post() {
+			const removedContact = this.bodyParams;
+
+			Users.removeContact(this.userId, removedContact);
+			const user = Users.findOneById(this.userId);
 			return API.v1.success(user.phonebook);
 		},
 	},
