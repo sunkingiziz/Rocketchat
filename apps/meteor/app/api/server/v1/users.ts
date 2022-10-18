@@ -948,7 +948,6 @@ API.v1.addRoute(
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{
 		post() {
-			console.log('Here in the post, bodyParams: ', this.bodyParams);
 			const updatedContact = this.bodyParams;
 			Users.updateContact(this.userId, updatedContact);
 
@@ -963,14 +962,9 @@ API.v1.addRoute(
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{
 		post() {
-			console.log('Here in the post, bodyParams: ', this.bodyParams);
 			const insertedContact = this.bodyParams;
-
-			Users.updateContact(this.userId, insertedContact);
-
-			const user = Users.findOneById(this.userId);
-			console.log('User: ', user);
-			return API.v1.success(user.phonebook);
+			Users.insertContact(this.userId, insertedContact);
+			return API.v1.success();
 		},
 	},
 );

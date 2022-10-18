@@ -1664,7 +1664,10 @@ Find users to send a message by email if:
 
 	insertContact(_id, insertedContact) {
 		const user = this.findOneById(_id);
-		const { phonebook } = user;
+		let { phonebook } = user;
+		if (!phonebook) {
+			phonebook = [];
+		}
 		phonebook.push(insertedContact);
 		const query = {
 			_id,
@@ -1684,7 +1687,9 @@ Find users to send a message by email if:
 		};
 		const remove = {
 			$pull: {
-				'phonebook.$.uid': removedContact.uid,
+				phonebook: {
+					$elemMatch: {uid:  removedContact.uid}
+				}	
 			},
 		};
 		return this.update(query, remove);
