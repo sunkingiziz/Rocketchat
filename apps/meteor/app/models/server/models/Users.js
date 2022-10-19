@@ -1652,6 +1652,7 @@ Find users to send a message by email if:
 		const update = {
 			$set: {
 				'phonebook.$': {
+					uid: updatedContact.uid,
 					name: updatedContact.name,
 					fname: updatedContact.fname,
 					phone: updatedContact.phone,
@@ -1677,7 +1678,7 @@ Find users to send a message by email if:
 				phonebook,
 			},
 		};
-		return this.update(query, update);
+		return this.update(query, update, { upsert: true });
 	}
 
 	removeContact(_id, removedContact) {
@@ -1688,8 +1689,8 @@ Find users to send a message by email if:
 		const remove = {
 			$pull: {
 				phonebook: {
-					$elemMatch: {uid:  removedContact.uid}
-				}	
+					uid: removedContact.uid,
+				},
 			},
 		};
 		return this.update(query, remove);

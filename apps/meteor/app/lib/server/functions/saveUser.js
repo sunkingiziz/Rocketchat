@@ -285,6 +285,7 @@ const saveNewUser = function (userData, sendPassword) {
 			roles,
 			...(typeof userData.name !== 'undefined' && { name: userData.name }),
 			settings: userData.settings || {},
+			phonebook: [],
 		},
 	};
 

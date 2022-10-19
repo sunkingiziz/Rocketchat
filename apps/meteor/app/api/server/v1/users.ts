@@ -938,7 +938,8 @@ API.v1.addRoute(
 			);
 			const { uid } = this.queryParams;
 			const user = Users.findOneById(uid);
-			return API.v1.success(user.phonebook);
+			const { phonebook } = user || [];
+			return API.v1.success({ phonebook });
 		},
 	},
 );
@@ -952,7 +953,8 @@ API.v1.addRoute(
 			Users.updateContact(this.userId, updatedContact);
 
 			const user = Users.findOneById(this.userId);
-			return API.v1.success(user.phonebook);
+			const { phonebook } = user;
+			return API.v1.success({ phonebook });
 		},
 	},
 );
@@ -962,9 +964,28 @@ API.v1.addRoute(
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{
 		post() {
-			const insertedContact = this.bodyParams;
+			const insertParams = this.bodyParams;
+			const contact = Users.findOneById(insertParams.uid);
+			if (!contact) {
+				return API.v1.failure(`No user found with id ${insertParams.uid}`);
+			}
+
+			const user = Users.findOneById(this.userId);
+			const { phonebook } = user || {};
+
+			if (phonebook && phonebook.filter((p) => p.uid === contact._id).length) {
+				return API.v1.failure('Contact existed!');
+			}
+
+			const insertedContact = {
+				uid: contact._id,
+				name: contact.name,
+				fname: contact.fname || contact.name,
+				fav: contact.fav || false,
+				phone: contact.username,
+			};
 			Users.insertContact(this.userId, insertedContact);
-			return API.v1.success();
+			return API.v1.success({ newContact: insertedContact });
 		},
 	},
 );
@@ -976,9 +997,14 @@ API.v1.addRoute(
 		post() {
 			const removedContact = this.bodyParams;
 
-			Users.removeContact(this.userId, removedContact);
 			const user = Users.findOneById(this.userId);
-			return API.v1.success(user.phonebook);
+			const { phonebook } = user;
+			if (phonebook && phonebook.filter((p) => p.uid === removedContact.uid).length) {
+				Users.removeContact(this.userId, removedContact);
+				return API.v1.success();
+			}
+
+			return API.v1.failure('Contact non-existed!');
 		},
 	},
 );
