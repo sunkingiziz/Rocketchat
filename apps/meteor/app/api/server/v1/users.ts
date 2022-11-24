@@ -1018,7 +1018,7 @@ API.v1.addRoute(
 			const user = Users.findOneById(this.userId);
 			const { otp } = user;
 			return API.v1.success({
-				request: otp.rqActivate == true,
+				request: otp.rqActivate === true,
 			});
 		},
 	},
@@ -1034,7 +1034,7 @@ API.v1.addRoute(
 			const user = Users.findOneById(this.userId);
 			const { otp } = user;
 			return API.v1.success({
-				request: otpCode == otp.otpCode,
+				request: otpCode === otp.otpCode,
 				otp: otp.otpCode,
 				otpCreatedTime: otp.otpCreatedTime,
 			});
