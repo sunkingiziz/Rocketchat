@@ -1014,12 +1014,11 @@ API.v1.addRoute(
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{
 		post() {
-			Users.requestOtpActivate(this.userId)
+			Users.requestOtpActivate(this.userId);
 			const user = Users.findOneById(this.userId);
-			
-			const {otp}=user;
+			const { otp } = user;
 			return API.v1.success({
-				request:otp.rqActivate==true
+				request: otp.rqActivate == true,
 			});
 		},
 	},
@@ -1030,15 +1029,14 @@ API.v1.addRoute(
 	{ authRequired: true },
 	{
 		post() {
-			
-			const {otpCode}=this.bodyParams;
-			Users.sendOtpActivate(this.userId,otpCode)
+			const { otpCode } = this.bodyParams;
+			Users.sendOtpActivate(this.userId, otpCode);
 			const user = Users.findOneById(this.userId);
-			const {otp}=user;
+			const { otp } = user;
 			return API.v1.success({
-				request:otpCode==otp.otpCode,
-				otp:otp.otpCode,
-				otpCreatedTime:otp.otpCreatedTime
+				request: otpCode == otp.otpCode,
+				otp: otp.otpCode,
+				otpCreatedTime: otp.otpCreatedTime,
 			});
 		},
 	},
