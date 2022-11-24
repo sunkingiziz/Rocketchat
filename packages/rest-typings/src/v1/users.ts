@@ -252,10 +252,10 @@ export type UsersEndpoints = {
 	};
 
 	'/v1/users.sendOtpActivate': {
-		POST: (params: {otpCode:string}) => {
-			request:boolean;
-			otp:string;
-			otpCreatedTime:Date
+		POST: (params: { otpCode: string }) => {
+			request: boolean;
+			otp: string;
+			otpCreatedTime: Date;
 		};
 	};
 
