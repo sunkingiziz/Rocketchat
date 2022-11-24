@@ -92,11 +92,11 @@ export interface IUserSettings {
 		[key: string]: any;
 	};
 }
-export interface IUserOtpActivate{
-	otpCode:string;
-	rqActivate: boolean
-	activate:boolean
-	otpCreatedTime:Date
+export interface IUserOtpActivate {
+	otpCode: string;
+	rqActivate: boolean;
+	activate: boolean;
+	otpCreatedTime: Date;
 }
 export interface IGetRoomRoles {
 	_id: string;
@@ -114,8 +114,7 @@ export interface IUser extends IRocketChatRecord {
 	roles: IRole['_id'][];
 	type: string;
 	active: boolean;
-	rqActivate:boolean
-	otp:IUserOtpActivate;
+	otp: IUserOtpActivate;
 	username?: string;
 	nickname?: string;
 	name?: string;
