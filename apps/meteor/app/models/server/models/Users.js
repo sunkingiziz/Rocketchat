@@ -1643,7 +1643,7 @@ Find users to send a message by email if:
 			},
 		});
 	}
-
+    
 	updateContact(_id, updatedContact) {
 		const query = {
 			_id,
@@ -1694,6 +1694,26 @@ Find users to send a message by email if:
 			},
 		};
 		return this.update(query, remove);
+	}
+
+	requestOtpActivate(_id) {
+		
+		const update={
+			$set:{
+				'otp.rqActivate':true
+			}
+		}
+		return this.update(_id, update);
+	}
+
+	sendOtpActivate(_id,otp){
+		const update={
+			$set:{
+				'otp.otpCode':otp,
+				'otp.otpCreatedTime':new Date()
+			}
+		}
+		return this.update(_id,update);
 	}
 }
 

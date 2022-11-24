@@ -1010,6 +1010,41 @@ API.v1.addRoute(
 );
 
 API.v1.addRoute(
+	'users.requestOtpActivate',
+	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
+	{
+		post() {
+			Users.requestOtpActivate(this.userId)
+			const user = Users.findOneById(this.userId);
+			
+			const {otp}=user;
+			return API.v1.success({
+				request:otp.rqActivate==true
+			});
+		},
+	},
+);
+
+API.v1.addRoute(
+	'users.sendOtpActivate',
+	{ authRequired: true },
+	{
+		post() {
+			
+			const {otpCode}=this.bodyParams;
+			Users.sendOtpActivate(this.userId,otpCode)
+			const user = Users.findOneById(this.userId);
+			const {otp}=user;
+			return API.v1.success({
+				request:otpCode==otp.otpCode,
+				otp:otp.otpCode,
+				otpCreatedTime:otp.otpCreatedTime
+			});
+		},
+	},
+);
+
+API.v1.addRoute(
 	'users.logout',
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{

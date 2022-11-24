@@ -245,6 +245,20 @@ export type UsersEndpoints = {
 		};
 	};
 
+	'/v1/users.requestOtpActivate': {
+		POST: () => {
+			request: boolean;
+		};
+	};
+
+	'/v1/users.sendOtpActivate': {
+		POST: (params: {otpCode:string}) => {
+			request:boolean;
+			otp:string;
+			otpCreatedTime:Date
+		};
+	};
+
 	'/v1/users.deactivateIdle': {
 		POST: (params: UserDeactivateIdleParamsPOST) => {
 			count: number;
