@@ -1699,20 +1699,30 @@ Find users to send a message by email if:
 	requestOtpActivate(_id) {
 		const update = {
 			$set: {
-				'otp.rqActivate': true,
+				'otp.otpCode': 'unknown',
 			},
 		};
 		return this.update(_id, update);
 	}
 
-	sendOtpActivate(_id, otp) {
-		const update = {
-			$set: {
-				'otp.otpCode': otp,
-				'otp.otpCreatedTime': new Date(),
-			},
-		};
-		return this.update(_id, update);
+	sendOtpActivate(_id, otpCode) {
+		const user = this.findOneById(_id);
+		let { otp } = user;
+		if (otp) {
+			let update = {
+				$set: {
+					'otp.active': otp.otpCode === otpCode,
+				},
+			};
+			return this.update(_id, update);
+		} else {
+			let update = {
+				$set: {
+					'otp.otpCode': 'unknown',
+				},
+			};
+			return this.update(_id, update);
+		}
 	}
 }
 

@@ -94,9 +94,7 @@ export interface IUserSettings {
 }
 export interface IUserOtpActivate {
 	otpCode: string;
-	rqActivate: boolean;
-	activate: boolean;
-	otpCreatedTime: Date;
+	active: boolean;
 }
 export interface IGetRoomRoles {
 	_id: string;

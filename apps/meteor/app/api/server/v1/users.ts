@@ -1030,13 +1030,14 @@ API.v1.addRoute(
 	{
 		post() {
 			const { otpCode } = this.bodyParams;
+			if (!Number(otpCode)) return API.v1.failure('OTP need to be number!');
 			Users.sendOtpActivate(this.userId, otpCode);
 			const user = Users.findOneById(this.userId);
 			const { otp } = user;
 			return API.v1.success({
 				request: otpCode === otp.otpCode,
 				otp: otp.otpCode,
-				otpCreatedTime: otp.otpCreatedTime,
+				otpCreatedTime: new Date(),
 			});
 		},
 	},
