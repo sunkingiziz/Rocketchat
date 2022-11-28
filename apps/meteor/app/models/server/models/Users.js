@@ -1707,13 +1707,13 @@ Find users to send a message by email if:
 
 	sendOtpActivate(_id, otpCode) {
 		const user = this.findOneById(_id);
-		const { otp } = user;
+		let { otp } = user;
 		if (!otp) {
-			otp={
-				active:false,
-				otpCode:'unknown'
-			}
-		} 
+			otp = {
+				active: false,
+				otpCode: 'unknown',
+			};
+		}
 		const update = {
 			$set: {
 				'otp.active': otp.otpCode === otpCode,
