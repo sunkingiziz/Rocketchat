@@ -1707,22 +1707,19 @@ Find users to send a message by email if:
 
 	sendOtpActivate(_id, otpCode) {
 		const user = this.findOneById(_id);
-		let { otp } = user;
-		if (otp) {
-			let update = {
-				$set: {
-					'otp.active': otp.otpCode === otpCode,
-				},
-			};
-			return this.update(_id, update);
-		} else {
-			let update = {
-				$set: {
-					'otp.otpCode': 'unknown',
-				},
-			};
-			return this.update(_id, update);
-		}
+		const { otp } = user;
+		if (!otp) {
+			otp={
+				active:false,
+				otpCode:'unknown'
+			}
+		} 
+		const update = {
+			$set: {
+				'otp.active': otp.otpCode === otpCode,
+			},
+		};
+		return this.update(_id, update);
 	}
 }
 
