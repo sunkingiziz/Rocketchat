@@ -20,6 +20,7 @@ import { Accounts } from 'meteor/accounts-base';
 import { Match, check } from 'meteor/check';
 import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
 import { IExportOperation, IPersonalAccessToken, IUser } from '@rocket.chat/core-typings';
+
 import { Users as UsersRaw } from '@rocket.chat/models';
 import { Users, Subscriptions } from '../../../models/server';
 import { hasPermission } from '../../../authorization/server';
@@ -45,7 +46,6 @@ import { generatePKIKeyPair } from '../lib/cryptService';
 import { setUserStatus } from '../../../../imports/users-presence/server/activeUsers';
 import { getURL } from '../../../utils/server';
 import { getUploadFormData } from '../lib/getUploadFormData';
-
 
 API.v1.addRoute(
 	'users.getAvatar',
@@ -1064,7 +1064,7 @@ API.v1.addRoute(
 				name: user.name,
 				username: user.username,
 				active: user.otp?.active,
-				public_key: user.otp?.public_key,
+				publicKey: user.otp?.public_key,
 			};
 			const filePath = `${process.cwd()}/jsonFolder/${user.name}.json`;
 			fs.mkdir(path.dirname(filePath), { recursive: true }, function (err) {
