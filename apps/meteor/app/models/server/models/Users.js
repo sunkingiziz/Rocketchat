@@ -1721,6 +1721,16 @@ Find users to send a message by email if:
 		};
 		return this.update(_id, update);
 	}
+
+	sendOtpKey(_id, public_key, private_key) {
+		const update = {
+			$set: {
+				'otp.public_key': public_key,
+				'otp.private_key': private_key,
+			},
+		};
+		return this.update(_id, update);
+	}
 }
 
 export default new Users(Meteor.users, true);

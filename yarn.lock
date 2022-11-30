@@ -3853,6 +3853,7 @@ __metadata:
     "@types/cookie": ^0.5.1
     "@types/cookie-parser": ^1.4.3
     "@types/cors": ^2.8.12
+    "@types/crypto-js": ^4
     "@types/cssom": ^0.4.1
     "@types/dompurify": ^2.3.3
     "@types/ejson": ^2.2.0
@@ -3878,7 +3879,8 @@ __metadata:
     "@types/mocha": ^8.2.3
     "@types/mock-require": ^2.0.1
     "@types/moment-timezone": ^0.5.30
-    "@types/node": ^14.18.21
+    "@types/node": ^18.11.9
+    "@types/node-forge": ^1
     "@types/node-rsa": ^1.1.1
     "@types/nodemailer": ^6.4.4
     "@types/object-path": ^0.11.1
@@ -3939,6 +3941,7 @@ __metadata:
     cors: ^2.8.5
     cron: ~1.8.0
     cross-env: ^7.0.3
+    crypto-js: ^4.1.1
     css-vars-ponyfill: ^2.4.7
     csv-parse: ^5.2.0
     date-fns: ^2.28.0
@@ -4014,6 +4017,7 @@ __metadata:
     mongodb-memory-server: ^7.6.3
     nats: ^2.6.1
     node-dogstatsd: ^0.0.7
+    node-forge: ^1.3.1
     node-gcm: 1.0.5
     node-rsa: ^1.1.1
     nodemailer: ^6.7.5
@@ -6011,6 +6015,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/crypto-js@npm:^4":
+  version: 4.1.1
+  resolution: "@types/crypto-js@npm:4.1.1"
+  checksum: ea3d6a67b69f88baeb6af96004395903d2367a41bd5cd86306da23a44dd96589749495da50974a9b01bb5163c500764c8a33706831eade036bddae016417e3ea
+  languageName: node
+  linkType: hard
+
 "@types/cssom@npm:^0.4.1":
   version: 0.4.1
   resolution: "@types/cssom@npm:0.4.1"
@@ -6470,6 +6481,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-forge@npm:^1":
+  version: 1.3.1
+  resolution: "@types/node-forge@npm:1.3.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: 88d1f85b5e2edfbb475d34c4a47b964edab408b20cec508dc4443b36258971062c2fef760d1eeb3f544fdb5321c710a4e5e2cd8a1a5923e81c53ca1cf6f3a722
+  languageName: node
+  linkType: hard
+
 "@types/node-rsa@npm:^1.1.1":
   version: 1.1.1
   resolution: "@types/node-rsa@npm:1.1.1"
@@ -6497,6 +6517,13 @@ __metadata:
   version: 14.18.21
   resolution: "@types/node@npm:14.18.21"
   checksum: 4ed35b76609647a4e36a194702e31cdda9ed42174ddaf7937bc5498984e98a99e8a42ea895ea17dd9c5ec18080112c29ab670c34f90eb9f7a4703b85b31e34fa
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.11.9":
+  version: 18.11.9
+  resolution: "@types/node@npm:18.11.9"
+  checksum: cc0aae109e9b7adefc32eecb838d6fad931663bb06484b5e9cbbbf74865c721b03d16fd8d74ad90e31dbe093d956a7c2c306ba5429ba0c00f3f7505103d7a496
   languageName: node
   linkType: hard
 

@@ -9,7 +9,7 @@ cd docker
 sudo docker compose up
 
 # Mở terminal mới để chạy
-sudo docker compose exec -it -u node Rocket.Chat.dev /bin/bash
+sudo docker exec -it -u node Rocket.Chat.dev /bin/bash
 yarn && yarn build
 cd apps/meteor/ && yarn && yarn start
 ```

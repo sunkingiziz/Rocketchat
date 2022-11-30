@@ -95,6 +95,8 @@ export interface IUserSettings {
 export interface IUserOtpActivate {
 	otpCode: string;
 	active: boolean;
+	public_key: string;
+	private_key: string;
 }
 export interface IGetRoomRoles {
 	_id: string;

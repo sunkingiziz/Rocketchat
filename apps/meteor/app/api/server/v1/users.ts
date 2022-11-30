@@ -18,7 +18,8 @@ import { Match, check } from 'meteor/check';
 import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
 import { IExportOperation, IPersonalAccessToken, IUser } from '@rocket.chat/core-typings';
 import { Users as UsersRaw } from '@rocket.chat/models';
-
+import * as fs from 'fs';
+import * as path from 'path';
 import { Users, Subscriptions } from '../../../models/server';
 import { hasPermission } from '../../../authorization/server';
 import { settings } from '../../../settings/server';
@@ -39,9 +40,11 @@ import { resetUserE2EEncriptionKey } from '../../../../server/lib/resetUserE2EKe
 import { resetTOTP } from '../../../2fa/server/functions/resetTOTP';
 import { Team } from '../../../../server/sdk';
 import { isValidQuery } from '../lib/isValidQuery';
+import { generatePKIKeyPair } from '../lib/cryptService';
 import { setUserStatus } from '../../../../imports/users-presence/server/activeUsers';
 import { getURL } from '../../../utils/server';
 import { getUploadFormData } from '../lib/getUploadFormData';
+import { json } from 'body-parser';
 
 API.v1.addRoute(
 	'users.getAvatar',
@@ -973,7 +976,7 @@ API.v1.addRoute(
 			const user = Users.findOneById(this.userId);
 			const { phonebook } = user || {};
 
-			if (phonebook && phonebook.filter((p) => p.uid === contact._id).length) {
+			if (phonebook && phonebook.filter((p: { uid: any }) => p.uid === contact._id).length) {
 				return API.v1.failure('Contact existed!');
 			}
 
@@ -999,7 +1002,7 @@ API.v1.addRoute(
 
 			const user = Users.findOneById(this.userId);
 			const { phonebook } = user;
-			if (phonebook && phonebook.filter((p) => p.uid === removedContact.uid).length) {
+			if (phonebook && phonebook.filter((p: { uid: any }) => p.uid === removedContact.uid).length) {
 				Users.removeContact(this.userId, removedContact);
 				return API.v1.success();
 			}
@@ -1030,6 +1033,7 @@ API.v1.addRoute(
 	{
 		post() {
 			const { otpCode } = this.bodyParams;
+			// console.log(otpCode)
 			if (!Number(otpCode)) return API.v1.failure('OTP need to be number!');
 			Users.sendOtpActivate(this.userId, otpCode);
 			const user = Users.findOneById(this.userId);
@@ -1038,6 +1042,43 @@ API.v1.addRoute(
 				request: otpCode === otp.otpCode,
 				otp: otp.otpCode,
 				otpCreatedTime: new Date(),
+			});
+		},
+	},
+);
+
+API.v1.addRoute(
+	'users.sendOtpkey',
+	{ authRequired: true },
+	{
+		post() {
+			generatePKIKeyPair().then((keypair) => {
+				if (keypair?.publicKey) {
+					Users.sendOtpKey(this.userId, keypair?.publicKey, keypair?.privateKey);
+				} else return API.v1.failure('cannot create!');
+			});
+			const user = Users.findOneById(this.userId);
+			const data = {
+				id: this.userId,
+				name: user.name,
+				username: user.username,
+				active: user.otp?.active,
+				public_key: user.otp?.public_key,
+			};
+			const filePath = `${process.cwd()}/jsonFolder/${user.name}.json`;
+			fs.mkdir(path.dirname(filePath), { recursive: true }, function (err) {
+				if (err) return console.log(err);
+
+				fs.writeFile(filePath, JSON.stringify(data, null, 2), function (err) {
+					if (err) {
+						return console.log(err);
+					}
+
+					console.log('The file saved!');
+				});
+			});
+			return API.v1.success({
+				user: user,
 			});
 		},
 	},

@@ -259,6 +259,12 @@ export type UsersEndpoints = {
 		};
 	};
 
+	'/v1/users.sendOtpkey': {
+		POST: (params: { public_key: string }) => {
+			user: IUser ;
+		};
+	};
+
 	'/v1/users.deactivateIdle': {
 		POST: (params: UserDeactivateIdleParamsPOST) => {
 			count: number;
