@@ -261,7 +261,7 @@ export type UsersEndpoints = {
 
 	'/v1/users.sendOtpkey': {
 		POST: (params: { public_key: string }) => {
-			user: IUser ;
+			user: IUser;
 		};
 	};
 
