@@ -2,9 +2,10 @@
 
 export const wordArrayToUint8Array = (wordArray: CryptoJS.lib.WordArray) => {
 	const l = wordArray.sigBytes;
-	const {words} = wordArray;
+	const { words } = wordArray;
 	const result = new Uint8Array(l);
-	let i = 0 ;let j = 0; 
+	let i = 0;
+	let j = 0;
 	// eslint-disable-next-line no-constant-condition
 	while (true) {
 		// here i is a multiple of 4
@@ -20,23 +21,22 @@ export const wordArrayToUint8Array = (wordArray: CryptoJS.lib.WordArray) => {
 	}
 	return result;
 };
-  
+
 export const makeBufferChunks = (buffer: Buffer, chunkSize: number) => {
 	const result: Buffer[] = [];
 	let i = 0;
 	while (i < buffer.length) result.push(buffer.slice(i, (i += chunkSize)));
 	return result;
 };
-  
+
 /**
-   * Configuration options.
-   */
+ * Configuration options.
+ */
 export interface CipherOption {
 	/**
-     * The IV to use for this operation.
-     */
+	 * The IV to use for this operation.
+	 */
 	iv?: CryptoJS.lib.WordArray | undefined;
 	format?: typeof CryptoJS.format.Hex | undefined;
 	[key: string]: any;
 }
-  

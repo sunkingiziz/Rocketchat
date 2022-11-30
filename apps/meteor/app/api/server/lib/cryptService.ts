@@ -5,8 +5,13 @@ import * as forge from 'node-forge';
 
 import { CipherOption, makeBufferChunks, wordArrayToUint8Array } from './utilsService';
 
+export const encryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+	const wordArray = crypto.lib.WordArray.create(buffer as unknown as number[]);
+	const encrypted = crypto.AES.encrypt(wordArray, secret, config);
+	return Buffer.from(encrypted.toString());
+};
 export const encryptAesFile = (file: File, secret: string | crypto.lib.WordArray) =>
-	file.arrayBuffer().then(buff => {
+	file.arrayBuffer().then((buff) => {
 		const originBuffer = Buffer.from(buff);
 		const encodedBuffer = encryptAES(originBuffer, secret);
 		// convert buffer to file
@@ -14,8 +19,12 @@ export const encryptAesFile = (file: File, secret: string | crypto.lib.WordArray
 
 		return new File([blob], file.name, { type: file.type });
 	});
+export const decryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+	const wordArray = crypto.AES.decrypt(String(buffer), secret, config);
+	return Buffer.from(wordArrayToUint8Array(wordArray));
+};
 export const decryptAesFile = (file: File, secret: string | crypto.lib.WordArray) =>
-	file.arrayBuffer().then(buff => {
+	file.arrayBuffer().then((buff) => {
 		const originBuffer = Buffer.from(buff);
 		const decodedBuffer = decryptAES(originBuffer, secret);
 		// convert buffer to file
@@ -23,21 +32,13 @@ export const decryptAesFile = (file: File, secret: string | crypto.lib.WordArray
 
 		return new File([blob], file.name, { type: file.type });
 	});
-export const encryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
-	const wordArray = crypto.lib.WordArray.create(buffer as unknown as number[]);
-	const encrypted = crypto.AES.encrypt(wordArray, secret, config);
-	return Buffer.from(encrypted.toString());
-};
+
 export const encryptAesString = (buffer: string, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
 	// const wordArray = crypto.lib.WordArray.create(buffer as unknown as number[]);
 	const encrypted = crypto.AES.encrypt(buffer, secret, config);
 	return encrypted.toString();
 };
 
-export const decryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
-	const wordArray = crypto.AES.decrypt(String(buffer), secret, config);
-	return Buffer.from(wordArrayToUint8Array(wordArray));
-};
 export const decryptAesString = (buffer: string, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
 	const wordArray = crypto.AES.decrypt(buffer, secret, config);
 	return wordArray.toString(crypto.enc.Utf8);
@@ -58,7 +59,7 @@ const _encryptPKI = (buffer: Buffer, publicKey: string) =>
 
 export const encryptPKI = (buffer: Buffer, publicKey: string) => {
 	const chunks = makeBufferChunks(buffer, 183)
-		.map(chunk => _encryptPKI(chunk, publicKey).toString('base64'))
+		.map((chunk) => _encryptPKI(chunk, publicKey).toString('base64'))
 		.join(',');
 	return Buffer.from(chunks);
 };
@@ -70,18 +71,18 @@ export const decryptPKI = (encrypted: Buffer, privateKey: string) => {
 	const chunks = encrypted
 		.toString()
 		.split(',')
-		.map(chunk => _decryptPKI(Buffer.from(chunk, 'base64'), privateKey));
+		.map((chunk) => _decryptPKI(Buffer.from(chunk, 'base64'), privateKey));
 	return Buffer.concat(chunks);
 };
 
 export const generatePKIKeyPair = (
 	options: forge.pki.rsa.GenerateKeyPairOptions = {
 		bits: 2048,
-		workers: 2
+		workers: 2,
 		// e: 0x10001,
-	}
-): Promise<| {publicKey: string;privateKey: string;}| undefined> =>
-	new Promise(resolve => {
+	},
+): Promise<{ publicKey: string; privateKey: string } | undefined> =>
+	new Promise((resolve) => {
 		forge.pki.rsa.generateKeyPair(options, (error, keypair) => {
 			// let pub = keypair.publicKey;
 			// let priv = keypair.privateKey;
@@ -91,7 +92,7 @@ export const generatePKIKeyPair = (
 			} else {
 				resolve({
 					publicKey: forge.pki.publicKeyToPem(keypair.publicKey),
-					privateKey: forge.pki.privateKeyToPem(keypair.privateKey)
+					privateKey: forge.pki.privateKeyToPem(keypair.privateKey),
 				});
 			}
 		});
