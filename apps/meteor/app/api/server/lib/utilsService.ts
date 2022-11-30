@@ -32,7 +32,7 @@ export const makeBufferChunks = (buffer: Buffer, chunkSize: number) => {
 /**
  * Configuration options.
  */
-export interface CipherOption {
+export interface ICipherOption {
 	/**
 	 * The IV to use for this operation.
 	 */

@@ -3,9 +3,9 @@ import { Buffer } from 'buffer';
 import * as crypto from 'crypto-js';
 import * as forge from 'node-forge';
 
-import { CipherOption, makeBufferChunks, wordArrayToUint8Array } from './utilsService';
+import { ICipherOption, makeBufferChunks, wordArrayToUint8Array } from './utilsService';
 
-export const encryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+export const encryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: ICipherOption) => {
 	const wordArray = crypto.lib.WordArray.create(buffer as unknown as number[]);
 	const encrypted = crypto.AES.encrypt(wordArray, secret, config);
 	return Buffer.from(encrypted.toString());
@@ -19,7 +19,7 @@ export const encryptAesFile = (file: File, secret: string | crypto.lib.WordArray
 
 		return new File([blob], file.name, { type: file.type });
 	});
-export const decryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+export const decryptAES = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: ICipherOption) => {
 	const wordArray = crypto.AES.decrypt(String(buffer), secret, config);
 	return Buffer.from(wordArrayToUint8Array(wordArray));
 };
@@ -33,23 +33,23 @@ export const decryptAesFile = (file: File, secret: string | crypto.lib.WordArray
 		return new File([blob], file.name, { type: file.type });
 	});
 
-export const encryptAesString = (buffer: string, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+export const encryptAesString = (buffer: string, secret: string | crypto.lib.WordArray, config?: ICipherOption) => {
 	// const wordArray = crypto.lib.WordArray.create(buffer as unknown as number[]);
 	const encrypted = crypto.AES.encrypt(buffer, secret, config);
 	return encrypted.toString();
 };
 
-export const decryptAesString = (buffer: string, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+export const decryptAesString = (buffer: string, secret: string | crypto.lib.WordArray, config?: ICipherOption) => {
 	const wordArray = crypto.AES.decrypt(buffer, secret, config);
 	return wordArray.toString(crypto.enc.Utf8);
 };
-export const encryptRabbit = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+export const encryptRabbit = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: ICipherOption) => {
 	const wordArray = crypto.lib.WordArray.create(buffer as unknown as number[]);
 	const encrypted = crypto.Rabbit.encrypt(wordArray, secret, config);
 	return Buffer.from(encrypted.toString());
 };
 
-export const decryptRabbit = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: CipherOption) => {
+export const decryptRabbit = (buffer: Buffer, secret: string | crypto.lib.WordArray, config?: ICipherOption) => {
 	const wordArray = crypto.Rabbit.decrypt(String(buffer), secret, config);
 	return Buffer.from(wordArrayToUint8Array(wordArray));
 };
