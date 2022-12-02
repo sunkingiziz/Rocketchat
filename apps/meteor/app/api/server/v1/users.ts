@@ -33,6 +33,7 @@ import {
 	setStatusText,
 	setUserAvatar,
 	saveCustomFields,
+	checkUsernameValid,
 } from '../../../lib/server';
 import { getFullUserDataByIdOrUsername } from '../../../lib/server/functions/getFullUserData';
 import { API } from '../api';
@@ -502,6 +503,10 @@ API.v1.addRoute(
 
 			if (!checkUsernameAvailability(this.bodyParams.username)) {
 				return API.v1.failure('Username is already in use');
+			}
+
+			if (!checkUsernameValid(this.bodyParams.username)) {
+				return API.v1.failure('Invalid username');
 			}
 
 			// Register the user
