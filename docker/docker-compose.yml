@@ -1,0 +1,51 @@
+version: '3.1'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: Rocket.Chat.dev1
+
+    volumes:
+      - ../:/home/node/app/
+
+    user: root
+
+    command: /bin/bash -c "chown -R node:root /home/node/app && tail -f /dev/null"
+
+    environment:
+      - PORT=3000
+      - ROOT_URL=http://localhost:3000
+      - MONGO_URL=mongodb://mongo:27017/rocketchat?replicaSet=rs0&directConnection=true
+      - MONGO_OPLOG_URL=mongodb://mongo:27017/local?replicaSet=rs0
+      # - MAIL_URL=smtp://smtp.email
+      - MAIL_URL=smtp://ptpm.bqp
+
+    depends_on:
+      - mongo  
+    ports:
+      - 3000:3000
+    labels:
+      - "traefik.backend=rocketchat"
+      - "traefik.frontend.rule=Host: your.domain.tld"
+
+  mongo:
+    image: mongo:5.0.0
+    restart: unless-stopped
+    # volumes:
+     # - /data/db:/data/db
+     # - ./data/db:/data/db
+    command: mongod --replSet rs0
+    ports: 
+      - 27017:27017
+    labels:
+      - "traefik.enable=false"
+
+  # this container's job is just run the command to initialize the replica set.
+  # it will run the command and remove himself (it will not stay running)
+  mongo-init-replica:
+    image: mongo:5.0.0
+    command: 'mongo mongo/rocketchat --eval "rs.initiate({ _id: ''rs0'', members: [ { _id: 0, host: ''mongo:27017'' } ]})"'
+    depends_on:
+      - mongo
