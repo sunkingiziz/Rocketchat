@@ -256,26 +256,19 @@ export class E2ERoom extends Emitter {
 		this.log('Importing room key ->', this.roomId);
 		// Get existing group key
 		// const keyID = groupKey.slice(0, 12);
+		console.log('E2EKey:', groupKey);
 		groupKey = groupKey.slice(12);
 		groupKey = Base64.decode(groupKey);
-
 		// Decrypt obtained encrypted session key
 		try {
 			const decryptedKey = await decryptRSA(e2e.privateKey, groupKey);
 			this.sessionKeyExportedString = toString(decryptedKey);
-			console.log(this.sessionKeyExportedString);
 		} catch (error) {
 			return this.error('Error decrypting group key: ', error);
 		}
 
 		this.keyID = Base64.encode(this.sessionKeyExportedString).slice(0, 12);
-		const Rooom = {
-			SessionKey: this.sessionKeyExportedString,
-			RoomId: this.roomId,
-			RoomE2E: this.keyID,
-			HethongId: this.userId,
-		};
-		console.log('Room:', Rooom);
+
 		// Import session key for use.
 		try {
 			const key = await importAESKey(JSON.parse(this.sessionKeyExportedString));
