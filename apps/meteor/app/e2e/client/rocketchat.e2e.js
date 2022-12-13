@@ -100,7 +100,7 @@ class E2E extends Emitter {
 		let private_key = Meteor._localStorage.getItem('private_key');
 
 		await this.loadKeysFromDB();
-
+		//console.log(this.db_public_key);
 		if (!public_key && this.db_public_key) {
 			public_key = this.db_public_key;
 		}
@@ -365,7 +365,6 @@ class E2E extends Emitter {
 		}
 
 		const data = await e2eRoom.decrypt(message.msg);
-
 		if (!data) {
 			return message;
 		}
