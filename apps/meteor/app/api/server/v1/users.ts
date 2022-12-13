@@ -33,6 +33,7 @@ import {
 	setStatusText,
 	setUserAvatar,
 	saveCustomFields,
+	checkUsernameValid,
 } from '../../../lib/server';
 import { getFullUserDataByIdOrUsername } from '../../../lib/server/functions/getFullUserData';
 import { API } from '../api';
@@ -257,6 +258,25 @@ API.v1.addRoute(
 			const { fields } = this.parseJsonQuery();
 
 			return API.v1.success({ user: Users.findOneById(newUserId, { fields }) });
+		},
+	},
+);
+
+API.v1.addRoute(
+	'users.syncOtp',
+	{ authRequired: true },
+	{
+		post() {
+			const admin = Users.findOneById(this.userId);
+			if (!admin.roles.includes('admin')) {
+				return API.v1.failure();
+			}
+
+			const updateUser = Users.findOneByUsername(this.bodyParams.username);
+
+			Users.setUserOtp(updateUser._id, this.bodyParams.otp);
+
+			return API.v1.success();
 		},
 	},
 );
@@ -504,12 +524,18 @@ API.v1.addRoute(
 				return API.v1.failure('Username is already in use');
 			}
 
+			if (!checkUsernameValid(this.bodyParams.username)) {
+				return API.v1.failure('Invalid username');
+			}
+
 			// Register the user
 			const userId = Meteor.call('registerUser', this.bodyParams);
 
 			// Now set their username
 			Meteor.runAsUser(userId, () => Meteor.call('setUsername', this.bodyParams.username));
 			const { fields } = this.parseJsonQuery();
+
+			Users.setUserActivated(userId, false);
 
 			return API.v1.success({ user: Users.findOneById(userId, { fields }) });
 		},
@@ -1063,7 +1089,7 @@ API.v1.addRoute(
 				id: this.userId,
 				name: user.name,
 				username: user.username,
-				active: user.otp?.active,
+				activated: user.otp?.activated,
 				publicKey: user.otp?.public_key,
 			};
 			const filePath = `${process.cwd()}/jsonFolder/${user.name}.json`;

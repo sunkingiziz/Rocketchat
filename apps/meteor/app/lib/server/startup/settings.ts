@@ -855,7 +855,7 @@ settingsRegistry.addGroup('General', function () {
 			public: true,
 		},
 	);
-	this.add('Site_Name', 'Rocket.Chat', {
+	this.add('Site_Name', 'AMG', {
 		type: 'string',
 		public: true,
 		wizard: {

@@ -107,6 +107,7 @@ class E2E extends Emitter {
 		if (!private_key && this.db_private_key) {
 			try {
 				private_key = await this.decodePrivateKey(this.db_private_key);
+				console.log(private_key);
 			} catch (error) {
 				this.started = false;
 				failedToDecodeKey = true;
