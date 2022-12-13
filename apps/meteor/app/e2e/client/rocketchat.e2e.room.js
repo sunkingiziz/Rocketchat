@@ -263,19 +263,19 @@ export class E2ERoom extends Emitter {
 		try {
 			const decryptedKey = await decryptRSA(e2e.privateKey, groupKey);
 			this.sessionKeyExportedString = toString(decryptedKey);
-			console.log(this.sessionKeyExportedString)
+			console.log(this.sessionKeyExportedString);
 		} catch (error) {
 			return this.error('Error decrypting group key: ', error);
 		}
 
 		this.keyID = Base64.encode(this.sessionKeyExportedString).slice(0, 12);
-		const Rooom={
-			SessionKey:this.sessionKeyExportedString,
-			RoomId:this.roomId,
-			RoomE2E:this.keyID,
-			HethongId: this.userId
-		}
-		console.log("Room:",Rooom )
+		const Rooom = {
+			SessionKey: this.sessionKeyExportedString,
+			RoomId: this.roomId,
+			RoomE2E: this.keyID,
+			HethongId: this.userId,
+		};
+		console.log('Room:', Rooom);
 		// Import session key for use.
 		try {
 			const key = await importAESKey(JSON.parse(this.sessionKeyExportedString));
@@ -395,14 +395,13 @@ export class E2ERoom extends Emitter {
 		} catch (error) {
 			return this.error('Error encrypting message: ', error);
 		}
-		let tt=this.keyID + Base64.encode(joinVectorAndEcryptedData(vector, result));
-		console.log("ma hoa",this.groupSessionKey);
+		let tt = this.keyID + Base64.encode(joinVectorAndEcryptedData(vector, result));
+		console.log('ma hoa', this.groupSessionKey);
 		return tt;
 	}
 
 	// Helper function for encryption of messages
 	encrypt(message) {
-		
 		const ts = new Date();
 		//console.log("ma hoa",message,ts);
 		const data = new TextEncoder('UTF-8').encode(
@@ -413,7 +412,7 @@ export class E2ERoom extends Emitter {
 				ts,
 			}),
 		);
-		
+
 		return this.encryptText(data);
 	}
 
@@ -423,7 +422,7 @@ export class E2ERoom extends Emitter {
 		if (message.t !== 'e2e' || message.e2e === 'done') {
 			return message;
 		}
-		
+
 		const data = await this.decrypt(message.msg);
 
 		if (!data?.text) {
@@ -450,7 +449,7 @@ export class E2ERoom extends Emitter {
 		message = message.slice(12);
 
 		const [vector, cipherText] = splitVectorAndEcryptedData(Base64.decode(message));
-	
+
 		try {
 			const result = await decryptAES(vector, this.groupSessionKey, cipherText);
 			return EJSON.parse(new TextDecoder('UTF-8').decode(new Uint8Array(result)));
