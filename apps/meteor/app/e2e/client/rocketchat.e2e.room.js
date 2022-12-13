@@ -395,7 +395,7 @@ export class E2ERoom extends Emitter {
 		} catch (error) {
 			return this.error('Error encrypting message: ', error);
 		}
-		let tt = this.keyID + Base64.encode(joinVectorAndEcryptedData(vector, result));
+		const tt = this.keyID + Base64.encode(joinVectorAndEcryptedData(vector, result));
 		console.log('ma hoa', this.groupSessionKey);
 		return tt;
 	}
@@ -403,7 +403,7 @@ export class E2ERoom extends Emitter {
 	// Helper function for encryption of messages
 	encrypt(message) {
 		const ts = new Date();
-		//console.log("ma hoa",message,ts);
+		// console.log("ma hoa",message,ts);
 		const data = new TextEncoder('UTF-8').encode(
 			EJSON.stringify({
 				_id: message._id,
