@@ -62,7 +62,7 @@ Meteor.startup(() => {
 		);
 	});
 
-	settings.watch('Site_Name', (value = 'Rocket.Chat') => {
+	settings.watch('Site_Name', (value = 'AMG') => {
 		const escapedValue = escapeHTML(value);
 		injectIntoHead(
 			'Site_Name',

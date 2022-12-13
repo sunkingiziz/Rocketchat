@@ -1107,6 +1107,16 @@ export class Users extends Base {
 		return this.update(_id, update);
 	}
 
+	setUserOtp(_id, otpCode) {
+		const update = {
+			$set: {
+				'otp.activated': false,
+				'otp.otpCode': otpCode,
+			},
+		};
+		return this.update(_id, update);
+	}
+
 	setEmail(_id, email) {
 		const update = {
 			$set: {
@@ -1202,6 +1212,19 @@ export class Users extends Base {
 		const update = {
 			$set: {
 				active,
+			},
+		};
+
+		return this.update(_id, update);
+	}
+
+	setUserActivated(_id, activated) {
+		if (activated == null) {
+			activated = false;
+		}
+		const update = {
+			$set: {
+				activated,
 			},
 		};
 
@@ -1710,13 +1733,13 @@ Find users to send a message by email if:
 		let { otp } = user;
 		if (!otp) {
 			otp = {
-				active: false,
+				activated: false,
 				otpCode: 'unknown',
 			};
 		}
 		const update = {
 			$set: {
-				'otp.active': otp.otpCode === otpCode,
+				'otp.activated': otp.otpCode === otpCode,
 			},
 		};
 		return this.update(_id, update);

@@ -263,6 +263,25 @@ API.v1.addRoute(
 );
 
 API.v1.addRoute(
+	'users.syncOtp',
+	{ authRequired: true },
+	{
+		post() {
+			const admin = Users.findOneById(this.userId);
+			if (!admin.roles.includes('admin')) {
+				return API.v1.failure();
+			}
+
+			const updateUser = Users.findOneByUsername(this.bodyParams.username);
+
+			Users.setUserOtp(updateUser._id, this.bodyParams.otp);
+
+			return API.v1.success();
+		},
+	},
+);
+
+API.v1.addRoute(
 	'users.delete',
 	{ authRequired: true },
 	{
@@ -515,6 +534,8 @@ API.v1.addRoute(
 			// Now set their username
 			Meteor.runAsUser(userId, () => Meteor.call('setUsername', this.bodyParams.username));
 			const { fields } = this.parseJsonQuery();
+
+			Users.setUserActivated(userId, false);
 
 			return API.v1.success({ user: Users.findOneById(userId, { fields }) });
 		},
@@ -1068,7 +1089,7 @@ API.v1.addRoute(
 				id: this.userId,
 				name: user.name,
 				username: user.username,
-				active: user.otp?.active,
+				activated: user.otp?.activated,
 				publicKey: user.otp?.public_key,
 			};
 			const filePath = `${process.cwd()}/jsonFolder/${user.name}.json`;
