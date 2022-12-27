@@ -1730,7 +1730,8 @@ Find users to send a message by email if:
 
 	sendOtpActivate(username, otpCode) {
 		const user = this.findOneByUsername(username);
-		let { _id, otp } = user;
+		const { _id } = user;
+		let { otp } = user;
 		if (!otp) {
 			otp = {
 				activated: false,
