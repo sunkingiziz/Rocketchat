@@ -256,7 +256,7 @@ export class E2ERoom extends Emitter {
 		this.log('Importing room key ->', this.roomId);
 		// Get existing group key
 		// const keyID = groupKey.slice(0, 12);
-		console.log('E2EKey:', groupKey);
+		// console.log('E2EKey:', groupKey);
 		groupKey = groupKey.slice(12);
 		groupKey = Base64.decode(groupKey);
 		// Decrypt obtained encrypted session key
@@ -324,6 +324,7 @@ export class E2ERoom extends Emitter {
 		// Encrypt session key for this user with his/her public key
 		try {
 			const encryptedUserKey = await encryptRSA(userKey, toArrayBuffer(this.sessionKeyExportedString));
+			// console.log('encryptedUserKey',encryptedUserKey)
 			// Key has been encrypted. Publish to that user's subscription model for this room.
 			await call('e2e.updateGroupKey', this.roomId, user._id, this.keyID + Base64.encode(new Uint8Array(encryptedUserKey)));
 		} catch (error) {

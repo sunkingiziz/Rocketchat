@@ -61,6 +61,7 @@ import './methods/saveUserPreferences';
 import './methods/saveUserProfile';
 import './methods/sendConfirmationEmail';
 import './methods/sendForgotPasswordEmail';
+import './methods/sendVerifyOtpUsername';
 import './methods/setAvatarFromService';
 import './methods/setUserActiveStatus';
 import './methods/setUserPassword';

@@ -1056,14 +1056,14 @@ API.v1.addRoute(
 
 API.v1.addRoute(
 	'users.sendOtpActivate',
-	{ authRequired: true },
+	{ authRequired: false },
 	{
 		post() {
-			const { otpCode } = this.bodyParams;
+			const { username, otpCode } = this.bodyParams;
 			// console.log(otpCode)
 			if (!Number(otpCode)) return API.v1.failure('OTP need to be number!');
-			Users.sendOtpActivate(this.userId, otpCode);
-			const user = Users.findOneById(this.userId);
+			Users.sendOtpActivate(username, otpCode);
+			const user = Users.findOneByUsername(username);
 			const { otp } = user;
 			return API.v1.success({
 				request: otpCode === otp.otpCode,

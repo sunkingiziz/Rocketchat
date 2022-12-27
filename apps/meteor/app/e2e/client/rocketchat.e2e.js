@@ -216,7 +216,7 @@ class E2E extends Emitter {
 		try {
 			this.privateKey = await importRSAKey(EJSON.parse(private_key), ['decrypt']);
 			Meteor._localStorage.setItem('private_key', private_key);
-			console.log('private_key', private_key);
+			// console.log('private_key', private_key);
 		} catch (error) {
 			return this.error('Error importing private key: ', error);
 		}

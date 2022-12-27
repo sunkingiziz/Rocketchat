@@ -1728,9 +1728,9 @@ Find users to send a message by email if:
 		return this.update(_id, update);
 	}
 
-	sendOtpActivate(_id, otpCode) {
-		const user = this.findOneById(_id);
-		let { otp } = user;
+	sendOtpActivate(username, otpCode) {
+		const user = this.findOneByUsername(username);
+		let { _id, otp } = user;
 		if (!otp) {
 			otp = {
 				activated: false,
