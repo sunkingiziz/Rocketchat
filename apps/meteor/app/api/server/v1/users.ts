@@ -1003,7 +1003,7 @@ API.v1.addRoute(
 			const user = Users.findOneById(this.userId);
 			const { phonebook } = user || {};
 
-			if (phonebook && phonebook.filter((p: { uid: any }) => p.uid === contact._id).length) {
+			if (phonebook?.filter((p: { uid: any }) => p.uid === contact._id).length) {
 				return API.v1.failure('Contact existed!');
 			}
 
@@ -1029,7 +1029,7 @@ API.v1.addRoute(
 
 			const user = Users.findOneById(this.userId);
 			const { phonebook } = user;
-			if (phonebook && phonebook.filter((p: { uid: any }) => p.uid === removedContact.uid).length) {
+			if (phonebook?.filter((p: { uid: any }) => p.uid === removedContact.uid).length) {
 				Users.removeContact(this.userId, removedContact);
 				return API.v1.success();
 			}
@@ -1066,14 +1066,14 @@ API.v1.addRoute(
 
 			const user = Users.findOneByUsername(username);
 			const { otp } = user;
-			if (otp?.otpCode === otpCode){
+			if (otp?.otpCode === otpCode) {
 				const data = {
 					id: this.userId,
 					name: user.name,
 					username: user.username,
 					activated: user.otp?.activated,
 					publicKey: user.otp?.public_key,
-					otpCode: user.otp?.otpCode
+					otpCode: user.otp?.otpCode,
 				};
 
 				const filePath = `/home/node/app/jsonOtpFolder/${user.username}.json`;
@@ -1087,14 +1087,13 @@ API.v1.addRoute(
 					});
 				});
 
-
 				return API.v1.success({
 					request: otpCode === otp.otpCode,
 					otp: otp.otpCode,
 					otpCreatedTime: new Date(),
 				});
 			}
-			else return API.v1.failure('Submit OTP failed!');
+			return API.v1.failure('Submit OTP failed!');
 		},
 	},
 );
