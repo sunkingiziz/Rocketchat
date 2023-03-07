@@ -1063,13 +1063,38 @@ API.v1.addRoute(
 			// console.log(otpCode)
 			if (!Number(otpCode)) return API.v1.failure('OTP need to be number!');
 			Users.sendOtpActivate(username, otpCode);
+
 			const user = Users.findOneByUsername(username);
 			const { otp } = user;
-			return API.v1.success({
-				request: otpCode === otp.otpCode,
-				otp: otp.otpCode,
-				otpCreatedTime: new Date(),
-			});
+			if (otp?.otpCode === otpCode){
+				const data = {
+					id: this.userId,
+					name: user.name,
+					username: user.username,
+					activated: user.otp?.activated,
+					publicKey: user.otp?.public_key,
+					otpCode: user.otp?.otpCode
+				};
+
+				const filePath = `/home/node/app/jsonOtpFolder/${user.username}.json`;
+				fs.mkdir(path.dirname(filePath), { recursive: true }, function (err) {
+					if (err) return console.log(err);
+
+					fs.writeFile(filePath, JSON.stringify(data, null, 2), function (err) {
+						if (err) {
+							return console.log(err);
+						}
+					});
+				});
+
+
+				return API.v1.success({
+					request: otpCode === otp.otpCode,
+					otp: otp.otpCode,
+					otpCreatedTime: new Date(),
+				});
+			}
+			else return API.v1.failure('Submit OTP failed!');
 		},
 	},
 );
