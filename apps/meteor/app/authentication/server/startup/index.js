@@ -333,7 +333,8 @@ Accounts.validateLoginAttempt(function (login) {
 		});
 	}
 
-	if (!!login.user.active !== true || !login.user.otp || !login.user.otp.activated) {
+	// if (!!login.user.active !== true || !login.user.otp || !login.user.otp.activated) {
+	if (!!login.user.active !== true) {
 		throw new Meteor.Error('error-user-is-not-activated', 'User is not activated', {
 			function: 'Accounts.validateLoginAttempt',
 		});

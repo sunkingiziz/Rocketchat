@@ -524,9 +524,9 @@ API.v1.addRoute(
 				return API.v1.failure('Username is already in use');
 			}
 
-			if (!checkUsernameValid(this.bodyParams.username)) {
-				return API.v1.failure('Invalid username');
-			}
+			// if (!checkUsernameValid(this.bodyParams.username)) {
+			// 	return API.v1.failure('Invalid username');
+			// }
 
 			// Register the user
 			const userId = Meteor.call('registerUser', this.bodyParams);
