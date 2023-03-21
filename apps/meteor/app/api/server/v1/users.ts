@@ -33,7 +33,6 @@ import {
 	setStatusText,
 	setUserAvatar,
 	saveCustomFields,
-	checkUsernameValid,
 } from '../../../lib/server';
 import { getFullUserDataByIdOrUsername } from '../../../lib/server/functions/getFullUserData';
 import { API } from '../api';

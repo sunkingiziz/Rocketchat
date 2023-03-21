@@ -504,11 +504,15 @@ API.v1.addRoute(
 			try {
 				DDPRateLimiter._increment(rateLimiterInput);
 				const rateLimitResult = DDPRateLimiter._check(rateLimiterInput);
+
 				if (!rateLimitResult.allowed) {
-					throw new Meteor.Error('too-many-requests', DDPRateLimiter.getErrorMessage(rateLimitResult), {
-						timeToReset: rateLimitResult.timeToReset,
-					});
+					console.log('too-many-requests');
 				}
+				// if (!rateLimitResult.allowed) {
+				// 	throw new Meteor.Error('too-many-requests', DDPRateLimiter.getErrorMessage(rateLimitResult), {
+				// 		timeToReset: rateLimitResult.timeToReset,
+				// 	});
+				// }
 
 				const result = Meteor.call(method, ...params);
 				return API.v1.success(mountResult({ id, result }));
@@ -564,10 +568,13 @@ API.v1.addRoute(
 				DDPRateLimiter._increment(rateLimiterInput);
 				const rateLimitResult = DDPRateLimiter._check(rateLimiterInput);
 				if (!rateLimitResult.allowed) {
-					throw new Meteor.Error('too-many-requests', DDPRateLimiter.getErrorMessage(rateLimitResult), {
-						timeToReset: rateLimitResult.timeToReset,
-					});
+					console.log('too-many-requests');
 				}
+				// if (!rateLimitResult.allowed) {
+				// 	throw new Meteor.Error('too-many-requests', DDPRateLimiter.getErrorMessage(rateLimitResult), {
+				// 		timeToReset: rateLimitResult.timeToReset,
+				// 	});
+				// }
 
 				const result = Meteor.call(method, ...params);
 				return API.v1.success(mountResult({ id, result }));
