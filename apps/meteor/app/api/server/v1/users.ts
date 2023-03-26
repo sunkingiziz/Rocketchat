@@ -542,6 +542,54 @@ API.v1.addRoute(
 );
 
 API.v1.addRoute(
+	'users.updateWorkplace',
+	{ authRequired: true },
+	{
+		post() {
+			const userId = this.bodyParams.userId ? this.bodyParams.userId : this.userId;
+			if (!Users.findOneById(userId)) {
+				throw new Meteor.Error('error-invalid-user', 'The optional "userId" param provided does not match any users');
+			}
+
+			// workplace: {_id, username, parentWorkplace: {_id, username}, rootChanel: {_id, username} }
+			Users.updateWorkplaceById(userId, this.bodyParams.workplace);
+			const user = Users.findOneById(userId);
+
+			return API.v1.success({ success: true, user });
+		},
+	},
+);
+
+API.v1.addRoute(
+	'users.getUsersInSameParentWorkplace',
+	{ authRequired: true },
+	{
+		get() {
+			const userId = this.bodyParams.userId ? this.bodyParams.userId : this.userId;
+			const user = Users.findOneById(userId);
+			const { workplace: currentWorkplace } = user;
+			const { rootChanel, parentWorkplace } = currentWorkplace;
+			const users = Users.getUsersInSameParentWorkplace(parentWorkplace.id);
+			// const workplaces = users.map( user => user['workplace.id']).filter((value, index, array) => array.indexOf(value) === index)
+			const twoLevelWorkplace = {};
+			for (let user of users) {
+				if (!twoLevelWorkplace[user.workplace.username]) {
+					twoLevelWorkplace[user.workplace.username] = {
+						_id: user.workplace._id,
+						username: user.workplace.username,
+					};
+					twoLevelWorkplace[user.workplace.username]['child'] = [];
+				}
+				twoLevelWorkplace[user.workplace.username]['child'].push(user);
+			}
+
+			return API.v1.success({ success: true, workplaceTree: { ...rootChanel, child: Object.values(twoLevelWorkplace) } });
+		},
+	},
+);
+
+
+API.v1.addRoute(
 	'users.resetAvatar',
 	{ authRequired: true },
 	{

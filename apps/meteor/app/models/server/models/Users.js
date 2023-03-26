@@ -1666,6 +1666,32 @@ Find users to send a message by email if:
 			},
 		});
 	}
+	
+	updateWorkplaceById(userId, workplace) {
+		return this.update(userId, {
+			$set: {
+				workplace,
+			},
+		});
+	}
+
+	getUsersInSameWorkplace(workplaceId) {
+		const query = {
+			'workplace._id': {
+				$eq: workplaceId,
+			},
+		};
+		return this.find(query);
+	}
+
+	getUsersInSameParentWorkplace(workplaceId) {
+		const query = {
+			'workplace.parentWorkplace._id': {
+				$eq: workplaceId,
+			},
+		};
+		return this.find(query);
+	}
 
 	updateContact(_id, updatedContact) {
 		const query = {
