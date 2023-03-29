@@ -1703,13 +1703,7 @@ Find users to send a message by email if:
 		};
 		const update = {
 			$set: {
-				'phonebook.$': {
-					uid: updatedContact.uid,
-					name: updatedContact.name,
-					fname: updatedContact.fname,
-					phone: updatedContact.phone,
-					fav: updatedContact.fav,
-				},
+				phonebook: updatedContact,
 			},
 		};
 		return this.update(query, update);

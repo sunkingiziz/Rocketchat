@@ -1059,7 +1059,7 @@ API.v1.addRoute(
 				name: contact.name,
 				fname: contact.fname || contact.name,
 				fav: contact.fav || false,
-				phone: contact.username,
+				username: contact.username,
 			};
 			Users.insertContact(this.userId, insertedContact);
 			return API.v1.success({ newContact: insertedContact });
