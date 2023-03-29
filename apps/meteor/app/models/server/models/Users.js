@@ -1666,7 +1666,7 @@ Find users to send a message by email if:
 			},
 		});
 	}
-	
+
 	updateWorkplaceById(userId, workplace) {
 		return this.update(userId, {
 			$set: {
@@ -1675,19 +1675,22 @@ Find users to send a message by email if:
 		});
 	}
 
-	getUsersInSameWorkplace(workplaceId) {
-		const query = {
-			'workplace._id': {
-				$eq: workplaceId,
-			},
-		};
-		return this.find(query);
-	}
+	// getUsersInSameWorkplace(workplaceId) {
+	// 	const query = {
+	// 		'workplace._id': {
+	// 			$eq: workplaceId,
+	// 		},
+	// 	};
+	// 	return this.find(query);
+	// }
 
-	getUsersInSameParentWorkplace(workplaceId) {
+	getUsersInSameParentWorkplace(workplaceId, userId) {
 		const query = {
 			'workplace.parentWorkplace._id': {
 				$eq: workplaceId,
+			},
+			'_id': {
+				$ne: userId,
 			},
 		};
 		return this.find(query);
