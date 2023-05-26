@@ -1099,7 +1099,7 @@ API.v1.addRoute(
 	{ authRequired: true, validateParams: isUserLogoutParamsPOST },
 	{
 		post() {
-			Users.requestOtpActivate(this.userId);
+			Users.setOtpActivate(this.userId,"0000");
 			const user = Users.findOneById(this.userId);
 			const { otp } = user;
 			return API.v1.success({
