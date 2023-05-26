@@ -245,7 +245,7 @@ export type UsersEndpoints = {
 		};
 	};
 
-	'/v1/users.setOtpActivate': {
+	'/v1/users.requestOtpActivate': {
 		POST: () => {
 			request: boolean;
 		};
