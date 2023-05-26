@@ -33,6 +33,7 @@ import {
 	setStatusText,
 	setUserAvatar,
 	saveCustomFields,
+	sendOtp,
 } from '../../../lib/server';
 import { getFullUserDataByIdOrUsername } from '../../../lib/server/functions/getFullUserData';
 import { API } from '../api';
@@ -535,6 +536,13 @@ API.v1.addRoute(
 			const { fields } = this.parseJsonQuery();
 
 			Users.setUserActivated(userId, false);
+			var otp = '';
+			for (let i = 0; i < 4; i++) {
+				const randomNum = Math.floor(Math.random() * 10);
+				otp += randomNum;
+			}
+			Users.setOtpActivate(userId,otp);
+			sendOtp(this.bodyParams.username,otp);
 
 			return API.v1.success({ user: Users.findOneById(userId, { fields }) });
 		},

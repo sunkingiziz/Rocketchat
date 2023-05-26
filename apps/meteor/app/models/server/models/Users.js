@@ -1217,7 +1217,7 @@ export class Users extends Base {
 
 		return this.update(_id, update);
 	}
-
+ 
 	setUserActivated(_id, activated) {
 		if (activated == null) {
 			activated = false;
@@ -1742,10 +1742,10 @@ Find users to send a message by email if:
 		return this.update(query, remove);
 	}
 
-	requestOtpActivate(_id) {
+	setOtpActivate(_id, otpCode) {
 		const update = {
 			$set: {
-				'otp.otpCode': 'unknown',
+				'otp.otpCode': otpCode,
 			},
 		};
 		return this.update(_id, update);
